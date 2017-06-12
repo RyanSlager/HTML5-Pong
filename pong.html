@@ -8,27 +8,62 @@
   var canvas;
   var canvasContext;
   var ballX = 50;
-  var ballY;
+  var ballSpeedX = 10;
+  var ballY = 50;
+  var ballSpeedY = 4;
 
 
   window.onload = function() {
     canvas = document.getElementById('gc');
     canvasContext = canvas.getContext('2d');
-    drawEverything();
+
+    var fps = 30
+    setInterval(function(){
+                  move(); drawEverything();
+                }, 1000/fps);
+
+
   }
 
-  function drawEverything(){
-    ballX = ballX + 10;
-    
-    canvasContext.fillStyle = 'black';
-    canvasContext.fillRect(0,0, canvas.width, canvas.height);
-    canvasContext.fillStyle = 'white';
-    canvasContext.fillRect(ballX, 225, 10, 10);
-    canvasContext.fillStyle = 'white';
-    canvasContext.fillRect(10, 225, 10, 50);
-    canvasContext.fillStyle = 'white';
-    canvasContext.fillRect(780, 225, 10, 50);
+  function move(){
+    ballX = ballX + ballSpeedX;
+    ballY = ballY + ballSpeedY;
 
+    if(ballX > canvas.width ){
+      ballSpeedX = -ballSpeedX;
+    }
+    if(ballX < 0){
+      ballSpeedX = -ballSpeedX;
+    }
+    if(ballY > canvas.height ){
+      ballSpeedY = -ballSpeedY;
+    }
+    if(ballY < 0){
+      ballSpeedY = -ballSpeedY;
+    }
+  }
+
+
+  function drawEverything(){
+    colorRect(0,0, canvas.width, canvas.height, 'black');
+    colorRect(10, 210, 10, 50, 'white');
+    colorRect(780, 210, 10, 50, 'white');
+    drawCirc(ballX, ballY, 10, 'white');
+
+
+
+  }
+
+  function colorRect(leftX, topY, width, height, drawColor){
+    canvasContext.fillStyle = drawColor;
+    canvasContext.fillRect(leftX,topY, width, height);
+  }
+
+  function drawCirc(centerX, centerY, radius, drawColor){
+    canvasContext.fillStyle = drawColor;
+    canvasContext.beginPath();
+    canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2, true);
+    canvasContext.fill();
   }
 
 
