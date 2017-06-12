@@ -12,6 +12,12 @@
   var ballY = 50;
   var ballSpeedY = 4;
 
+  var paddle1Y = 250;
+  var paddle2Y = 250;
+  const PADDLE_HEIGHT = 100;
+  const PADDLE_WIDTH = 10;
+
+
 
   window.onload = function() {
     canvas = document.getElementById('gc');
@@ -21,7 +27,11 @@
     setInterval(function(){
                   move(); drawEverything();
                 }, 1000/fps);
-
+    canvas.addEventListener('mousemove',
+                function(evt){
+                  var mousePos = calculateMousPos(evt);
+                  paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
+                });
 
   }
 
@@ -29,11 +39,23 @@
     ballX = ballX + ballSpeedX;
     ballY = ballY + ballSpeedY;
 
+    //ball passing right side
     if(ballX > canvas.width ){
-      ballSpeedX = -ballSpeedX;
+      if(ballY > paddle2Y && ballY < paddle2Y + PADDLE_HEIGHT){
+        ballSpeedX = -ballSpeedX;
+      }
+      else{
+      ballReset();
+      }
     }
+    //ball passing left side
     if(ballX < 0){
-      ballSpeedX = -ballSpeedX;
+      if(ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT){
+        ballSpeedX = -ballSpeedX;
+      }
+      else{
+      ballReset();
+      }
     }
     if(ballY > canvas.height ){
       ballSpeedY = -ballSpeedY;
@@ -43,15 +65,20 @@
     }
   }
 
+  function ballReset(){
+    ballX = canvas.width/2;
+    ballY = canvas.height/2;
+    ballSpeedX = -ballSpeedX;
+  }
+
 
   function drawEverything(){
     colorRect(0,0, canvas.width, canvas.height, 'black');
-    colorRect(10, 210, 10, 50, 'white');
-    colorRect(780, 210, 10, 50, 'white');
+    //player paddle
+    colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
+    //comp paddle
+    colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
     drawCirc(ballX, ballY, 10, 'white');
-
-
-
   }
 
   function colorRect(leftX, topY, width, height, drawColor){
@@ -64,6 +91,18 @@
     canvasContext.beginPath();
     canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2, true);
     canvasContext.fill();
+  }
+
+  function calculateMousPos(evt){
+    var rect = canvas.getBoundingClientRect();
+    var root = document.documentElement;
+    var mouseX = evt.clientX - rect.left - root.scrollLeft;
+    var mouseY = evt.clientY - rect.top - root.scrollTop;
+
+    return{
+      x:mouseX,
+      y:mouseY
+    };
   }
 
 
