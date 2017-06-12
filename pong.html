@@ -1,0 +1,40 @@
+<html>
+<title>Pong</title>
+
+<canvas id="gc" width="800" height="600">
+</canvas>
+
+<script>
+  var canvas;
+  var canvasContext;
+  var ballX = 50;
+  var ballY;
+
+
+  window.onload = function() {
+    canvas = document.getElementById('gc');
+    canvasContext = canvas.getContext('2d');
+    drawEverything();
+  }
+
+  function drawEverything(){
+    ballX = ballX + 10;
+    
+    canvasContext.fillStyle = 'black';
+    canvasContext.fillRect(0,0, canvas.width, canvas.height);
+    canvasContext.fillStyle = 'white';
+    canvasContext.fillRect(ballX, 225, 10, 10);
+    canvasContext.fillStyle = 'white';
+    canvasContext.fillRect(10, 225, 10, 50);
+    canvasContext.fillStyle = 'white';
+    canvasContext.fillRect(780, 225, 10, 50);
+
+  }
+
+
+
+
+
+</script>
+
+</html>
